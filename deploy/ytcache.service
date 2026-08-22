@@ -1,0 +1,22 @@
+[Unit]
+Description=VRChat YouTube Cache controller
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=exec
+User=ytcache
+Group=ytcache
+WorkingDirectory=/opt/ytcache
+EnvironmentFile=/etc/ytcache/ytcache.env
+ExecStart=/opt/ytcache/venv/bin/gunicorn --workers 1 --threads 4 --bind 127.0.0.1:8080 --access-logfile - --error-logfile - app:app
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/tmp/ytcache
+
+[Install]
+WantedBy=multi-user.target

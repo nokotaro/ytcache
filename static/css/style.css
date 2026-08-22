@@ -1,0 +1,14 @@
+:root { color-scheme: dark; font-family: system-ui, sans-serif; }
+body { margin: 0; background: #10131a; color: #eef2ff; }
+main { max-width: 560px; margin: 0 auto; padding: 2rem 1rem; }
+h1 { font-size: 1.45rem; margin: 0 0 .5rem; }
+h2 { font-size: 1rem; margin: 0 0 .6rem; }
+.hint, #status { color: #b7c0d8; line-height: 1.55; }
+label { display: block; margin: 1.4rem 0 .35rem; font-weight: 650; }
+input, button { box-sizing: border-box; width: 100%; border-radius: .5rem; font: inherit; }
+input { border: 1px solid #5f6b85; background: #181e2b; color: inherit; padding: .75rem; }
+button { margin-top: .65rem; border: 0; background: #6d7cff; color: white; padding: .75rem; font-weight: 700; cursor: pointer; }
+button:disabled { cursor: wait; opacity: .6; }
+#result { overflow-wrap: anywhere; margin-top: 1.3rem; padding: 1rem; border-radius: .5rem; background: #181e2b; }
+code { display: block; color: #b9c4ff; line-height: 1.5; }
+#copy { background: #37425f; }
