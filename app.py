@@ -179,8 +179,9 @@ def run_job(video_id: str) -> None:
         run_checked(
             [
                 FFMPEG_BIN, "-y", "-i", str(source_file), "-map", "0:v:0", "-map", "0:a:0?",
-                "-sn", "-dn", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "20",
-                "-preset", "veryfast", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart",
+                "-sn", "-dn", "-vf", "fps=30", "-r", "30", "-c:v", "libx264", "-pix_fmt", "yuv420p",
+                "-crf", "20", "-preset", "veryfast", "-g", "60", "-keyint_min", "60",
+                "-sc_threshold", "0", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart",
                 str(output_file),
             ],
             "H.264/AACへの変換",
