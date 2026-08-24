@@ -29,6 +29,7 @@ cache.example.com ─ Cloudflare Tunnel ─ Flask / gunicorn (worker 1)
 - **ジョブは1本ずつ**実行します。プロセス内キューの上限も設け、同じ動画IDはロック下で1ジョブに統合します。gunicornを複数ワーカーにするとメモリキューが分裂するため、必ず `--workers 1` にします。
 - **失敗や中断後も一時ファイルを消去**します。動画長、変換後サイズ、空きディスク容量、待ち行列数を環境変数で制限できます。
 - **`+faststart` MP4**を生成し、映像は H.264 / yuv420p、音声は AAC に正規化します。これでも個々のVRChatプレイヤー・端末での再生可否を保証するものではないため、実機テストは必要です。
+- **出力フレームレートは30fps固定（CFR）**です。ffmpegの `fps=30` フィルタと出力 `-r 30` により、60fps・可変フレームレートを含む入力でも30fpsにフレームを間引き／複製します。GOPも60フレーム（30fpsで2秒）に固定します。
 
 ### API
 
@@ -176,6 +177,7 @@ Cloudflare Accessで `cache.example.com` 全体を対象にSelf-hosted applicati
 - `MAX_PENDING` を超える要求はHTTP 429で拒否されます。通常は `MAX_WORKERS=1`、`MAX_PENDING=3` を維持するのが安全です。
 - yt-dlpの仕様変更、年齢制限、地域制限、ログイン必須動画などでは取得に失敗することがあります。エラーはUIとjournalに表示されます。Cookie・アカウント資格情報をこの公開管理ツールに持ち込む場合は、リスクを理解した上で別途厳格に管理してください。
 - 更新時はファイル配置後に `sudo systemctl restart ytcache`。アップデート前後に短尺動画でR2のContent-Type、Range、Quest再生を確認してください。
+- **30fps化の反映:** 既にR2に保存済みの動画は、同じ動画IDで再実行しても再変換されません。30fps版を作るには対象オブジェクトだけを削除してから、管理UIで再度キャッシュしてください。例: `sudo -u ytcache RCLONE_CONFIG=/etc/ytcache/rclone.conf rclone deletefile r2:mybucket/videos/<VIDEO_ID>.mp4`。削除対象とバケット名を確認してから実行してください。
 
 ## 制約
 
